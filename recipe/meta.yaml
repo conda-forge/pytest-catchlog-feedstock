@@ -1,6 +1,5 @@
 {% set name = "pytest-catchlog" %}
 {% set version = "1.2.2" %}
-{% set hash_type = "sha256" %}
 {% set hash = "4be15dc5ac1750f83960897f591453040dff044b5966fe24a91c2f7d04ecfcf0" %}
 {% set ext = "zip" %}
 
@@ -10,26 +9,27 @@ package:
 
 source:
   fn: {{ name }}-{{ version }}.{{ ext }}
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.{{ ext }}
-  {{ hash_type }}: {{ hash }}
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.{{ ext }}
+  sha256: {{ hash }}
 
 build:
   noarch: python
-  number: 1
-  script: python -m pip install --no-deps --ignore-installed .
+  number: 2
+  script: {{ PYTHON }} -m pip install . --no-deps -vv
 
 requirements:
   host:
     - pip
-    - python
+    - python {{ python_min }}
     - setuptools
   run:
-    - python
+    - python >={{ python_min }}
     - pytest
 
 test:
   requires:
     - pytest
+    - python {{ python_min }}
   imports:
     - pytest_catchlog
   commands:
